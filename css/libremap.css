@@ -1,0 +1,14 @@
+img.right {
+  clear: both;
+  float: right;
+}
+
+div.half {
+  width: 49%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+img.small {
+  height: 3em;
+}
