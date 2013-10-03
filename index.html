@@ -24,10 +24,15 @@
     <!-- Transition theme. More available in /themes/transition/ or create your own. -->
     <link rel="stylesheet" href="themes/transition/fade.css">
 
-    <link rel="stylesheet" href="css/libremap.css">
-
     <!-- Required Modernizr file -->
     <script src="modernizr.custom.js"></script>
+
+    <!-- leaflet -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <link rel="stylesheet" href="http://leaflet.github.com/Leaflet.markercluster/dist/MarkerCluster.Default.css" />
+
+    <link rel="stylesheet" href="css/libremap.css">
   </head>
   <body class="deck-container">
 
@@ -41,7 +46,7 @@
       <h3>Nico Echaniz</h3>
       <p>
         <a href="http://www.altermundi.net/">Altermundi</a>,
-        <a href="http://mapa.mesh.altermundi.net/">Altermap</a>,
+        <a href="http://mapa.mesh.altermundi.net/">AlterMap</a>,
         <a href="https://github.com/libre-mesh">LibreMesh</a>
       </p>
       <img src="images/freifunk.svg" class="right small">
@@ -54,43 +59,239 @@
     </section>
 
     <section class="slide">
-      <h2>OpenWiFiMap history: André's motivation</h2>
+      <h2>LibreMap: goals</h2>
+      <p>Provide a router database and map visualization that</p>
       <ul>
-        <li>
-          Before 2012: freifunk in Berlin had 3 (or more) maps:
-          <ul>
-            <li>ffmap</li>
-            <li>heartbeat</li>
-            <li>yaffmap</li>
-          </ul>
-        </li>
-        <li>In 2012: all maps and node databases were gone due to a server
-          crash!</li>
-        <li>If a service can be shut down completely by simply disabling one server, perhaps it wasn't good anyway! ☺</li>
+        <li>shows the state of <strong>all community networks</strong>, both on
+          a <strong>global</strong> and <strong>local</strong> scale.</li>
+        <li>is decentralized.</li>
+        <li>is easy to use and extend (new communities often write their own
+          because existing ones are too hard to use).</li>
+        <li>is independent of involved routing protocols and other technical
+          details.</li>
+        <li>scales up to global level (&gt;100k routers).</li>
+        <li>shares <strong>open data</strong> for community networks
+          (<a href="http://opendatacommons.org/licenses/odbl/">ODbL</a>).
       </ul>
     </section>
 
     <section class="slide">
-      <h2>OpenWiFiMap history: Goals</h2>
+      <h2>LibreMap</h2>
+      <h3>= <a href="http://mapa.mesh.altermundi.net/">AlterMap</a>
+        + <a href="http://openwifimap.net">OpenWiFiMap</a></h3>
+      <p>Let's take a look at these two first...</p>
+    </section>
+
+    <section class="slide">
+      <h2>AlterMap: history</h2>
+    </section>
+
+    <section class="slide">
+      <h2>OpenWiFiMap: history</h2>
+      <p>André's motivation for writing OpenWiFiMap:</p>
+      <ul>
+        <li>
+          Before 2012: freifunk in Berlin had (at least) <strong>3</strong>
+          maps: ffmap, heartbeat, yaffmap, ...
+        </li>
+        <li>In mid 2012: <strong>no</strong> map or node database! (server
+          crash)</li>
+        <li>If a service can be shut down completely by simply disabling one
+          server, then it's time to rethink! ☺</li>
+        <li>Remember Sven-Ola: "decentralized lives longer".</li>
+        <li>Check it out: <a href="http://openwifimap.net">openwifimap.net</a>.</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>AlterMap/OpenWiFiMap</h2>
+      <p>We began our two implementations independently and both picked
+        <strong>CouchDB</strong> for their backing database.</p>
+      <p>In May 2013 in Berlin, at WCW13 (wireless community weekend), we
+        decided to merge our projects and work jointly on
+        <strong>LibreMap</strong>.</p>
+    </section>
+
+    <section class="slide">
+      <h2>What's CouchDB?</h2>
+      <ul>
+        <li>stores any JSON document (schema-free).</li>
+        <li>accessible via HTTP REST API (database disguised as a webserver).</li>
+        <li>built-in replication</li>
+        <li>views via map/reduce functions.</li>
+        <li>spatial views with
+          <a href="https://github.com/couchbase/geocouch/">GeoCouch</a>
+          (thx @<a href="https://github.com/vmx">vmx</a>).
+        </li>
+        <li>no more php/python/... code necessary on the server. CouchDB
+          includes all we need.</li>
+        <li>CouchApps: HTML5 apps that are completely served by CouchDB.</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: features 1/2</h2>
+      <p>By using CouchDB we get the following almost for free:</p>
+      <ul>
+        <li>replication: each community may have one or more CouchDB servers (→
+          federated/decentralized).</li>
+        <li>HTTP API.</li>
+        <li>rapid queries (especially spatial queries).</li>
+        <li>live updates (yep, that's right!).
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: features 2/2</h2>
+      <p>While merging, we picked (and still pick) the best of both worlds.</p>
       <div class="half">
-        <h3>Database</h3>
+        <h3>From AlterMap:</h3>
         <ul>
-          <li>open for all communities worldwide</li>
-          <li>decentralized</li>
-          <li>replicable</li>
-          <li>flexible data format</li>
-          <li>simple HTTP REST API</li>
-          <li>scalable</li>
+          <li>live updates</li>
+          <li>clean backbone.js implementation</li>
+          <li>community selection</li>
         </ul>
       </div>
       <div class="half">
-        <h3>Map visualization</h3>
+        <h3>From OpenWiFiMap:</h3>
         <ul>
-          <li>show nodes+links</li>
-          <li>desktop- and touch-devices</li>
-          <li>global view possible</li>
+          <li>scalability through spatial views with
+            <a href="https://github.com/couchbase/geocouch/">GeoCouch</a>
+          </li>
+          <li>mobile-friendliness</li>
+          <li>update handlers and validators that keep the data sane</li>
         </ul>
       </div>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: add router</h2>
+      <pre>
+{
+  "api_rev": "1.0",
+  "type": "router",
+  "hostname": "awesome-router",
+  "location": {
+    "lat": 52.493,
+    "lon": 13.385
+  }
+}
+</pre>
+      <p>Upload the above file (router-min.json) to LibreMap:</p>
+      <pre>
+$ curl -X POST -d @router-min.json http://libremap.net/api/router
+</pre>
+      <p>Answer:</p>
+      <pre>
+{"ok":true,"id":"d3e7183695687af88617e253d702ccf6"}
+</pre>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: get router</h2>
+      <p>Retrieve router:</p>
+      <pre>
+$ curl http://libremap.net/api/router/d3e7183695687af88617e253d702ccf6
+</pre>
+      <pre>
+{
+<div class="mark"><div class="annotate">CouchDB took care of this.</div><div>  "_id": "d3e7183695687af88617e253d702ccf6",
+  "_rev": "1-cca2fd9932a9d1fbab95c27566c46730",
+  "ctime": "2013-10-03T13:47:58.972Z",
+  "mtime": "2013-10-03T13:47:58.972Z",</div></div>
+  "api_rev": "1.0",
+  "type": "router",
+  "hostname": "awesome-router",
+  "location": {
+    "lat": 52.493,
+    "lon": 13.385
+  }
+}
+</pre>
+      <p>Full documentation can be found in the
+        <a href="https://github.com/libre-mesh/libremap/blob/master/doc-api.md">API docs</a>.</p>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: update router</h2>
+      <p>Update router:</p>
+      <pre>
+$ curl -X PUT -d @router-min-upd.json http://libremap.net/api/router/d3e7183695687af88617e253d702ccf6
+</pre>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: location query</h2>
+      <p>Return all routers in bounding box around Berlin:</p>
+      <pre>
+$ curl http://libremap.net/api/routers_by_location?bbox=13,52,14,53
+</pre>
+      <pre>
+{
+  "update_seq": 166,
+  "rows":[
+    {
+      "id":"d3e7183695687af88617e253d702ccf6",
+      ...
+    },
+    ...
+  ]
+}
+</pre>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: replication demo</h2>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: live update demo</h2>
+    </section>
+
+    <section class="slide">
+      <h2>Where does the data come from?</h2>
+      <ul>
+        <li>
+          preferred variant: routers update themselves in the database<br>
+          → openwrt update agent.
+        </li>
+        <li>
+          if a community already maintains a router database, then they can
+          do bulk uploading to a LibreMap instance.
+        </li>
+        <li>
+          one router in the network may push its view of the network.
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: challenge</h2>
+      <div class="half">
+        <h3>When will we see &gt;100k routers on a global map?</h3>
+      </div>
+      <div class="half">
+        <div id="futuremap"></div>
+      </div>
+      <h3 style="text-align: center">Help us to achieve this goal! ☺</h3>
+    </section>
+
+    <section class="slide">
+      <h2>LibreMap: join us!</h2>
+      <p>This project is also about <strong>your</strong> community! Help us
+        by</p>
+      <ul>
+        <li>providing your routers' data.</li>
+        <li>setting up a LibreMap instance for your community and let it
+          replicate to existing instances.</li>
+        <li>discussing, advancing and further standardizing the data
+          format.</li>
+      </ul>
+      <h3>Check it out at<br><a href="https://github.com/libre-mesh/libremap">github.com/libre-mesh/libremap</a></h3>
+    </section>
+
+    <section class="slide">
+      <h1>thx!</h1>
     </section>
 
     <!-- End slides. -->
@@ -140,6 +341,43 @@
     <script>
       $(function() {
         $.deck('.slide');
+
+        var map = L.map('futuremap').fitBounds([
+            [-60, -121],
+            [83, 165]]);
+        L.tileLayer(
+            'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+              key: 'e4e152a60cc5414eb81532de3d676261',
+              styleId: 997,
+              attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>'
+              }).addTo( map );
+        var places = [
+          {pos: [-35, -61], num: 7482},
+          {pos: [0, -68], num: 3452},
+          {pos: [50, 9], num: 15319},
+          {pos: [40, -112], num: 10455},
+          {pos: [36, -75], num: 6455},
+          {pos: [64, 22], num: 4085},
+          {pos: [30, 48], num: 9036},
+          {pos: [7, -1], num: 8054},
+          {pos: [-31, 27], num: 6533},
+          {pos: [8, 46], num: 3411},
+          {pos: [20, 74], num: 35203},
+          {pos: [20, 103], num: 7034},
+          {pos: [36, 120], num: 40754},
+          {pos: [57, 45], num: 4510},
+          {pos: [66, 135], num: 5},
+          {pos: [-34, 150], num: 10412},
+          {pos: [3, 139], num: 3461},
+        ];
+        for (var i=0, place; place=places[i++];) {
+          var icon  =new L.DivIcon({
+            html: '<div><span>' + place.num + '</span></div>',
+            className: 'marker-cluster marker-cluster-small',
+            iconSize: new L.Point(40, 40),
+          });
+          L.marker(place.pos, {icon: icon}).addTo(map);
+        }
       });
     </script>
   </body>

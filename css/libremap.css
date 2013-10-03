@@ -12,3 +12,29 @@ div.half {
 img.small {
   height: 3em;
 }
+
+.slide p, .slide blockquote, .slide iframe, .slide img, .slide ul, .slide ol, .slide pre, .slide video {
+  margin-bottom: 0.5em;
+}
+
+pre {
+  font-size: 0.5em !important;
+}
+
+pre div.mark {
+  display: inline-block;
+  border: 0.3em solid red;
+}
+
+pre div.annotate {
+  position: absolute;
+  color: red;
+  margin-top: -1.5em;
+  margin-left: 12em;
+}
+
+#futuremap {
+  width: 100%;
+  height: 12em;
+  margin-bottom: 1em;
+}
