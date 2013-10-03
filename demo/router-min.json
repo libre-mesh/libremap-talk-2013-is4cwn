@@ -1,0 +1,9 @@
+{
+  "api_rev": "1.0",
+  "type": "router",
+  "hostname": "awesome-router",
+  "location": {
+    "lat": 52.493,
+    "lon": 13.385
+  }
+}
